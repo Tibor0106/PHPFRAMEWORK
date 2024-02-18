@@ -5,7 +5,7 @@ require_once "./Route.php";
 $databaseAction = new DatabaseAction();
 $request = $_SERVER["REQUEST_URI"];
 
-Route::get("/", function($request) {
+Route::get("/", function($params) {
     require "./Pages/index.html";
 });
 
@@ -15,6 +15,9 @@ Route::get("/user/{username}", function($params) use ($databaseAction) {
     echo $responseHolder->response;
 });
 
+Route::post("/user", function($params) {
+    //$params
+});
 Route::execute($request);
 
 ?>
