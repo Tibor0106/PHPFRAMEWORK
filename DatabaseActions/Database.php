@@ -1,4 +1,5 @@
 <?php
+require_once "Helpers/Response.php";
 class DatabaseAction
 {
     public function __construct()
@@ -26,13 +27,13 @@ class DatabaseAction
     }
 
     private function UpdateAndDeleteAndInsertExecute(string $sql): Response {
-        require_once "../ConnectionData.php";
+        require_once "./ConnectionData.php";
         if ($conn->query($sql) === TRUE)  return new Response(True,200);
         return new Response(False,500);        
     }
     private function SelectExecute(string $sql): Response
     {
-        require_once "../ConnectionData.php";
+        require_once "./ConnectionData.php";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
             return new Response("Error preparing statemenet",500);
