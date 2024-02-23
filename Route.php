@@ -1,6 +1,4 @@
-<?php
-
-class Route {
+<?php class Route {
     private static $routes = [];
 
     public static function get($path, $callback) {
@@ -22,8 +20,9 @@ class Route {
                 }
             }
         } 
-        http_response_code(405); //Ha nem a megott metódussal történik a hívás
+      
     }
+
     private static function matchRoute($pattern, $request, &$params) {
         $pattern = str_replace('/', '\/', $pattern);
         $pattern = preg_replace('/{[^\/]+}/', '([^\/]+)', $pattern);

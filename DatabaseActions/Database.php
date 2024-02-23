@@ -1,5 +1,6 @@
 <?php
 require_once "Helpers/Response.php";
+
 class DatabaseAction
 {
     public function __construct()
@@ -34,7 +35,16 @@ class DatabaseAction
     }
     private function SelectExecute(string $sql): Response
     {
-        require_once "./ConnectionData.php";
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "tibor_paragh";
+        
+         $conn  = new mysqli($servername, $username, $password,$dbname);
+        
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
             return new Response("Error preparing statemenet", 500);
