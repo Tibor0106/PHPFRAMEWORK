@@ -1,12 +1,22 @@
 <?php
 require_once "Response.php";
 
+
 class DatabaseAction
 {
+    private mysqli $conn;
+    private bool $databaseAccess;
     public function __construct()
     {
+        $connect = new Database("root", "", "tibor_paragh", "localhost");
+        if($connect->tryConnect()){
+           $this->conn = $connect->getConnection();
+           $this->databaseAccess = true;
+        } else {
+            $this->databaseAccess = false;
+        }
+        
     }
-
     public function Update($sql): Response
     {
         return $this->UpdateAndDeleteAndInsertExecute($sql);
@@ -29,23 +39,15 @@ class DatabaseAction
 
     private function UpdateAndDeleteAndInsertExecute(string $sql): Response
     {
-        require_once "./ConnectionData.php";
-        if ($conn->query($sql) === TRUE)  return new Response(True, "", 200);
+        if(!$this->databaseAccess) return null;
+        if ($this->conn->query($sql) === TRUE)  return new Response(True, "", 200);
         return new Response(False, "", 500);
     }
     private function SelectExecute(string $sql): Response
     {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "tibor_paragh";
-        
-         $conn  = new mysqli($servername, $username, $password,$dbname);
-        
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        $stmt = $conn->prepare($sql);
+        if(!$this->databaseAccess) return null;
+       
+        $stmt = $this->conn->prepare($sql);
         if (!$stmt) {
             return new Response("Error preparing statemenet","", 500);
         }
@@ -58,7 +60,7 @@ class DatabaseAction
                 $data[] = $row;
             }
         }
-        $conn->close();
+        $this->conn->close();
         return new Response($data, json_encode($data), 200);
     }
 }

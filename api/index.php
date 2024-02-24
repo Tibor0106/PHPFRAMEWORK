@@ -4,13 +4,7 @@ require_once "./src/Mysql.php";
 require_once "./src/Route.php";
 
 
-$Database = new Database("root", "", "tibor_paragh", "localhost");
-if(!$Database->tryConnect()){
-    return;
-}
-
 $databaseAction = new DatabaseAction(); 
-
 session_start();
 header("Access-Control-Allow-Headers: *");
 
